@@ -1,0 +1,19 @@
+{
+  "name": "housemates-backend",
+  "version": "1.0.0",
+  "description": "an all-round app for everything house-related",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sparrownor1/housemates-backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sparrownor1/housemates-backend/issues"
+  },
+  "homepage": "https://github.com/Sparrownor1/housemates-backend#readme"
+}
