@@ -80,6 +80,7 @@ func Callback(c *gin.Context) {
 	}
 
 	// Redirect to logged in page.
+	// TODO: change this URL
 	c.Redirect(http.StatusTemporaryRedirect, "/")
 }
 
