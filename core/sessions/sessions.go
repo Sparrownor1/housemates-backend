@@ -1,17 +1,20 @@
 package sessions
 
 import (
-	"housemates/housemates-backend/core/db"
+	"encoding/gob"
 
-	gormsessions "github.com/gin-contrib/sessions/gorm"
+	"github.com/gin-contrib/sessions/cookie"
 )
 
-var store gormsessions.Store
+var store cookie.Store
 
 func Init() {
-	store = gormsessions.NewStore(db.GetDB(), true, []byte("secret"))
+	// To store custom types in our cookies,
+	// we must first register them using gob.Register
+	gob.Register(map[string]interface{}{})
+	store = cookie.NewStore([]byte("secret"))
 }
 
-func GetStore() gormsessions.Store {
+func GetStore() cookie.Store {
 	return store
 }

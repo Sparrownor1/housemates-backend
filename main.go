@@ -9,7 +9,10 @@ import (
 
 func main() {
 	db.Init()
+	// sessions needs db
 	sessions.Init()
+	// authenticator needs sessions
 	authenticator.Init()
+	// routes needs authenticator
 	routes.Run()
 }
