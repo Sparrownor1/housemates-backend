@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"housemates/housemates-backend/middleware"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -16,4 +18,5 @@ func Run() {
 
 // getRoutes will create our routes of our entire application
 func getRoutes() {
+	router.Use(middleware.AuthMiddleware())
 }
