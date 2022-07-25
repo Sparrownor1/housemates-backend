@@ -30,7 +30,7 @@ func Init() {
 
 func GetJWKS() *keyfunc.JWKS {
 	if jwks == nil {
-		log.Fatal("jwks not initialized")
+		log.Fatal("authenticator not initialized")
 	}
 	return jwks
 }

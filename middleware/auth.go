@@ -11,15 +11,18 @@ import (
 
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		_, err := validateToken(c.Request.Header["Bearer"][0])
-		if err != nil {
-			c.AbortWithStatus(http.StatusUnauthorized)
+		if tokenStrings, ok := c.Request.Header["Bearer"]; ok && (len(tokenStrings) > 1) {
+			token, err := validateToken(tokenStrings[0])
+			if err != nil || !token.Valid {
+				c.AbortWithStatus(http.StatusUnauthorized)
+			}
+			c.Next()
 		}
-		c.Next()
+		c.AbortWithStatus(http.StatusUnauthorized)
 	}
 }
 
-func validateToken(tokenString string) (interface{}, error) {
+func validateToken(tokenString string) (*jwt.Token, error) {
 	jwks := authenticator.GetJWKS()
 
 	token, err := jwt.Parse(tokenString, jwks.Keyfunc)
