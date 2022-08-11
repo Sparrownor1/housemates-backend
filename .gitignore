@@ -105,3 +105,6 @@ dist
 
 # Backend Executable File
 housemates-backend
+
+# VSCode Config
+.vscode/
