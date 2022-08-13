@@ -21,5 +21,6 @@ func getRoutes() {
 	api := router.Group("/api")
 
 	v1 := api.Group("/v1")
+	addAuthRoutes(v1)
 	v1.Use(middleware.AuthMiddleware())
 }
