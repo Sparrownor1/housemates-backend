@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"housemates/housemates-backend/core/models"
 	"log"
 	"os"
 
@@ -10,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+var db *gorm.DB = nil
 
 func Init() {
 	var err error
@@ -31,8 +32,14 @@ func Init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// migrations
+	db.AutoMigrate(&models.User{})
 }
 
 func GetDB() *gorm.DB {
+	if db == nil {
+		log.Fatal("db uninitialized")
+	}
 	return db
 }
