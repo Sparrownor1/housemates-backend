@@ -50,6 +50,7 @@ func Login(ctx *gin.Context) {
 		}
 
 		ctx.JSON(http.StatusOK, user)
+		return
 	}
 
 	log.Println("login info not present")
