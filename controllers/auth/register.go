@@ -47,7 +47,7 @@ func Register(ctx *gin.Context) {
 				}
 
 				// successful, log user in
-				ctx.JSON(http.StatusOK, user)
+				ctx.JSON(http.StatusOK, auth.GenerateTokenString(user))
 				return
 			} else {
 				// some other error

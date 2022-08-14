@@ -50,7 +50,7 @@ func Login(ctx *gin.Context) {
 			return
 		}
 
-		ctx.JSON(http.StatusOK, user)
+		ctx.JSON(http.StatusOK, auth.GenerateTokenString(user))
 		return
 	}
 
