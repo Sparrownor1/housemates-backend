@@ -4,6 +4,7 @@ import (
 	"errors"
 	"housemates/housemates-backend/core/db"
 	"housemates/housemates-backend/core/models"
+	"housemates/housemates-backend/libs/auth"
 	"log"
 	"net/http"
 
@@ -36,7 +37,7 @@ func Register(ctx *gin.Context) {
 					FirstName:    registerInfo.FirstName,
 					LastName:     registerInfo.LastName,
 					Email:        registerInfo.Email,
-					PasswordHash: hash(registerInfo.Password),
+					PasswordHash: auth.Hash(registerInfo.Password),
 				}
 
 				if err := db.Create(&user).Error; err != nil {

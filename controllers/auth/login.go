@@ -4,6 +4,7 @@ import (
 	"errors"
 	"housemates/housemates-backend/core/db"
 	"housemates/housemates-backend/core/models"
+	"housemates/housemates-backend/libs/auth"
 	"log"
 	"net/http"
 
@@ -42,7 +43,7 @@ func Login(ctx *gin.Context) {
 
 		// user in db
 		// check if passwords match
-		if hash(password) != user.PasswordHash {
+		if auth.Hash(password) != user.PasswordHash {
 			// no match
 			log.Println("no password match")
 			ctx.AbortWithStatus(http.StatusUnauthorized)
