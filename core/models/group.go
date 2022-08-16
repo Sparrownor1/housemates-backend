@@ -6,4 +6,5 @@ type Group struct {
 	gorm.Model
 	Name     string
 	JoinCode string
+	Lists    []List
 }
