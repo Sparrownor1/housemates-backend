@@ -20,7 +20,7 @@ func Hash(password string) string {
 // userClaims for jwt
 type UserClaims struct {
 	models.User
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 // JWT
@@ -45,8 +45,8 @@ func GenerateTokenString(user models.User) string {
 	userClaims := UserClaims{
 		// TODO: cleanup what we are sending back here
 		user,
-		jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(time.Minute * 60).Unix(),
+		jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 60)),
 			Issuer:    "housemates",
 		},
 	}
