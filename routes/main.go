@@ -24,4 +24,5 @@ func getRoutes() {
 	addAuthRoutes(v1)
 	v1.Use(middleware.AuthMiddleware())
 	addGroupRoutes(v1)
+	addListsRoutes(v1)
 }
