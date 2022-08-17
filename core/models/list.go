@@ -11,7 +11,8 @@ type List struct {
 
 type ListItem struct {
 	gorm.Model
-	Title  string
-	Done   bool
 	ListID uint
+	Title  string
+	Index  uint
+	Done   bool
 }
