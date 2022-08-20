@@ -11,5 +11,5 @@ func addListItemRoutes(rg *gin.RouterGroup) {
 
 	listItemRoutes.POST("/add", listitems.Add)
 	listItemRoutes.PATCH("/update", listitems.Update)
-	listItemRoutes.DELETE("/delete", listitems.Add)
+	listItemRoutes.DELETE("/delete", listitems.Delete)
 }
