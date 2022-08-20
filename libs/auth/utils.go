@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"housemates/housemates-backend/core/models"
 	"log"
+	"time"
 
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -19,7 +20,7 @@ func Hash(password string) string {
 // userClaims for jwt
 type UserClaims struct {
 	models.User
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 }
 
 // JWT
@@ -42,9 +43,10 @@ func ValidateTokenString(tokenString string) (*models.User, error) {
 
 func GenerateTokenString(user models.User) string {
 	userClaims := UserClaims{
+		// TODO: cleanup what we are sending back here
 		user,
-		jwt.StandardClaims{
-			ExpiresAt: 150000,
+		jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 60)),
 			Issuer:    "housemates",
 		},
 	}
