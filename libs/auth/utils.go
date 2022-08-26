@@ -7,9 +7,11 @@ import (
 	"housemates/housemates-backend/core/db"
 	"housemates/housemates-backend/core/models"
 	"log"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v4"
+	"github.com/joho/godotenv"
 )
 
 // Password Hashing
@@ -24,12 +26,20 @@ type UserClaims struct {
 	jwt.RegisteredClaims
 }
 
-// JWT
-var signingKey = []byte("mysecret")
+func getSigningKey() []byte {
+	godotenv.Load()
+
+	signingKey := os.Getenv("JWT_SIGNING_KEY")
+	if signingKey == "" {
+		log.Fatal("no SIGNING_KEY env var")
+	}
+
+	return []byte(signingKey)
+}
 
 func ValidateTokenString(tokenString string) (*models.User, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &UserClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return signingKey, nil
+		return getSigningKey(), nil
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse token: %w", err)
@@ -54,7 +64,6 @@ func ValidateTokenString(tokenString string) (*models.User, error) {
 
 func GenerateTokenString(user models.User) string {
 	userClaims := UserClaims{
-		// TODO: cleanup what we are sending back here
 		user.ID,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 60)),
@@ -63,7 +72,7 @@ func GenerateTokenString(user models.User) string {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, userClaims)
-	ss, err := token.SignedString(signingKey)
+	ss, err := token.SignedString(getSigningKey())
 	if err != nil {
 		log.Fatal(err)
 	}
