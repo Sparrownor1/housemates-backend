@@ -31,10 +31,12 @@ func AuthMiddleware() gin.HandlerFunc {
 
 		log.Println("token:", tokenStringHeader[1])
 
-		if _, err := auth.ValidateTokenString(tokenStringHeader[1]); err != nil {
+		if user, err := auth.ValidateTokenString(tokenStringHeader[1]); err != nil {
 			log.Println("auth error:", err)
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
+		} else {
+			c.Set("user", user)
 		}
 
 		c.Next()
