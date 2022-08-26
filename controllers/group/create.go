@@ -15,7 +15,8 @@ type groupInfo struct {
 }
 
 func CreateGroup(ctx *gin.Context) {
-	user, exists := ctx.Get("user")
+	value, exists := ctx.Get("user")
+	user := value.(*models.User)
 
 	// ensure user exists
 	if !exists {
@@ -24,7 +25,7 @@ func CreateGroup(ctx *gin.Context) {
 	}
 
 	// ensure user not already in a group
-	if user.(*models.User).GroupID != 0 {
+	if user.GroupID != 0 {
 		ctx.AbortWithError(http.StatusForbidden, fmt.Errorf("user has group already"))
 		return
 	}
@@ -37,8 +38,9 @@ func CreateGroup(ctx *gin.Context) {
 	}
 
 	group := models.Group{
-		Name:       groupInfo.GroupName,
-		InviteCode: group.GenerateInviteCode(),
+		Name:        groupInfo.GroupName,
+		InviteCode:  group.GenerateInviteCode(),
+		AdminUserID: user.ID,
 	}
 
 	db := db.GetDB()
@@ -50,10 +52,10 @@ func CreateGroup(ctx *gin.Context) {
 	}
 
 	// add user to group
-	user.(*models.User).GroupID = group.ID
-	user.(*models.User).Group = group
+	user.GroupID = group.ID
+	user.Group = group
 
-	result = db.Save(user.(*models.User))
+	result = db.Save(user)
 	if result.Error != nil {
 		ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("error adding user to group in database"))
 		return
