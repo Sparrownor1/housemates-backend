@@ -4,7 +4,7 @@ import "gorm.io/gorm"
 
 type Group struct {
 	gorm.Model
-	Name     string
-	JoinCode string
-	Lists    []List
+	Name       string
+	InviteCode string
+	Lists      []List
 }
