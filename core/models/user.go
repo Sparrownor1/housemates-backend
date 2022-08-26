@@ -8,6 +8,6 @@ type User struct {
 	LastName     string
 	Email        string `gorm:"unique"`
 	PasswordHash string
-	GroupID      int
+	GroupID      uint
 	Group        Group
 }

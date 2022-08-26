@@ -4,6 +4,7 @@ package auth
 
 import (
 	"fmt"
+	"housemates/housemates-backend/core/db"
 	"housemates/housemates-backend/core/models"
 	"log"
 	"time"
@@ -19,7 +20,7 @@ func Hash(password string) string {
 
 // userClaims for jwt
 type UserClaims struct {
-	models.User
+	UserID uint
 	jwt.RegisteredClaims
 }
 
@@ -35,7 +36,17 @@ func ValidateTokenString(tokenString string) (*models.User, error) {
 	}
 
 	if claims, ok := token.Claims.(*UserClaims); ok && token.Valid {
-		return &claims.User, nil
+		id := claims.ID
+
+		var user models.User
+
+		result := db.GetDB().First(&user, id)
+
+		if result.Error != nil {
+			return nil, result.Error
+		}
+
+		return &user, nil
 	} else {
 		return nil, fmt.Errorf("not logged in: %w", err)
 	}
@@ -44,7 +55,7 @@ func ValidateTokenString(tokenString string) (*models.User, error) {
 func GenerateTokenString(user models.User) string {
 	userClaims := UserClaims{
 		// TODO: cleanup what we are sending back here
-		user,
+		user.ID,
 		jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Minute * 60)),
 			Issuer:    "housemates",
