@@ -49,5 +49,15 @@ func CreateGroup(ctx *gin.Context) {
 		return
 	}
 
+	// add user to group
+	user.(*models.User).GroupID = group.ID
+	user.(*models.User).Group = group
+
+	result = db.Save(user.(*models.User))
+	if result.Error != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("error adding user to group in database"))
+		return
+	}
+
 	ctx.JSON(http.StatusOK, gin.H{"group": group})
 }
