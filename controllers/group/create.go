@@ -16,16 +16,15 @@ type groupInfo struct {
 
 func CreateGroup(ctx *gin.Context) {
 	value, exists := ctx.Get("user")
-	user := value.(*models.User)
-
 	// ensure user exists
 	if !exists {
 		ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("user doesn't exist after middleware"))
 		return
 	}
+	user := value.(*models.User)
 
 	// ensure user not already in a group
-	if user.GroupID != 0 {
+	if user.GroupID != nil {
 		ctx.AbortWithError(http.StatusForbidden, fmt.Errorf("user has group already"))
 		return
 	}
@@ -52,12 +51,9 @@ func CreateGroup(ctx *gin.Context) {
 	}
 
 	// add user to group
-	user.GroupID = group.ID
-	user.Group = group
-
-	result = db.Save(user)
-	if result.Error != nil {
-		ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("error adding user to group in database"))
+	err := db.Model(user).Association("Group").Replace(&group)
+	if err != nil {
+		ctx.AbortWithError(http.StatusInternalServerError, fmt.Errorf("error adding user to group in database: %s", err))
 		return
 	}
 

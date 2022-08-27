@@ -8,6 +8,6 @@ type User struct {
 	LastName     string
 	Email        string `gorm:"unique"`
 	PasswordHash string
-	GroupID      uint
-	Group        Group
+	GroupID      *uint
+	Group        Group `gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
 }
