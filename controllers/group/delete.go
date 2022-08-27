@@ -34,7 +34,8 @@ func DeleteGroup(ctx *gin.Context) {
 		return
 	}
 
-	// this line is here as for some reason the OnDelete constraint is not being added properly
+	// this is here because the group record is only soft-deleted so the onDelete action doesn't trigger
+	// see here https://stackoverflow.com/questions/67749708/cascade-delete-in-gorm-does-not-remove-associated-tables
 	db.Model(user).Association("Group").Delete(group)
 
 	result := db.Delete(&group)
